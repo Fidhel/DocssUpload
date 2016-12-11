@@ -1,0 +1,44 @@
+﻿using DocSS_SyncFile.Dao;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DocSS_SyncFile.Utilities
+{
+    class DocssUtil
+    {
+
+        public static bool arquivoBloqueado(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException e)
+            {
+                DaoTxtImpl.regException(e);
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
+        }
+
+        public static String installationName(Profile profile) {
+            String time = DateTime.Now.ToString("yyyyMMddhhmm");
+            String machine = System.Environment.MachineName;
+            String instalacao = profile.usuario + "$" + machine;
+            return instalacao= time+"$"+machine+ "$" + profile.usuario;
+        }
+    }
+}

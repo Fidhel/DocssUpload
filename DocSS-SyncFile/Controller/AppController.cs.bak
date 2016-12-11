@@ -1,0 +1,260 @@
+﻿using DocSS_SyncFile.ClientService;
+using DocSS_SyncFile.Dao;
+using DocSS_SyncFile.Model;
+using DocSS_SyncFile.Utilities;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace DocSS_SyncFile.Controller
+{
+
+
+
+    class AppController
+    {
+        private DaoAcess dao;
+        private Profile profile;
+        private FileMonitor fileMonitor;
+        private bool checkDir;
+        
+        public static int qtdEnvio = 0;
+        public static int qtdPendentesEnvio = 0;
+        public static Boolean serverStatus;
+        public static Boolean liberarEnvio = true;
+        public static List<String> listNotificacoes = new List<string>();
+        private enum TIPO_ENVIO_LOG { PENDENTE = 1, SUCESSO };
+
+        public AppController()
+        {
+            dao = new DaoAcess();
+            this.refresh();
+            fileMonitor = new FileMonitor(profile); 
+        }
+
+        private void refresh() {
+            profile = dao.getProfile();
+            
+        }
+        
+
+        public Profile getProfile() {
+            return profile;
+        }
+
+        public bool updateProfile() {
+            dao.atualizarProfile(profile);
+            return true;
+        }
+
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static void countEnvio() {
+            qtdEnvio++;
+            MonitorFiles.atualizarQtdArquivosPendentesEnvio();
+        }
+
+        public void processarArquivosGrandes(bool subpasta, DocssDirectory d)
+        {
+            if (liberarEnvio)
+            {
+                liberarEnvio = false;
+                List<DocsFileVo> list;
+                ArquivosController files = new ArquivosController();
+                list = files.listarGrandesArquivosPendentesEnvio(d);
+
+                MonitorFiles.atualizarQtdArquivosPendentesEnvio(list.Count);
+
+                PoolControle.liberarPoolGrandesArquivos();
+                int count = 0;
+                foreach (DocsFileVo docs in list)
+                {
+                    if (profile.maxArqMin == 0 | count < profile.maxArqMin)
+                    {
+                        List<DocsFileVo> listParts = files.spliSendFile(docs);
+                        foreach (DocsFileVo part in listParts)
+                        {
+                            DocsFileVo sendPart = files.popularEnvioDocsFileVo(part, profile,d);
+                            String caminhoAbsoultoArquivoEnviado = sendPart.caminhoAbsoluto;
+                            files.prepararDiretorioEnvio(docs, sendPart);
+
+                            if (ReceiverClient.SincronizarArquivosSerial(sendPart, profile))
+                            {
+                                files.deletarArquivoEnviado(caminhoAbsoultoArquivoEnviado);
+                            }
+                        }
+                        files.deletePastaTmpEnvio(docs.nomeArquivo);
+                        DocsFileVo send = files.popularEnvioDocsFileVoSemByteArrray(docs, profile,d);
+                        ReceiverClient.SincronizarArquivos(docs, profile);
+                        AppController.countEnvio();
+                        count++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                this.logEnviarArquivos((int)TIPO_ENVIO_LOG.PENDENTE, d, list);
+
+                liberarEnvio = true;
+            }
+        }
+
+        public void processarArquivosPequenos(DocssDirectory d)
+        {
+            
+            /*Loga no servidor Docss-Receiver que o servico esta em execucao.*/
+            LogClient.logServicoEmExecucao(profile);
+
+            this.logEnviarArquivos((int)TIPO_ENVIO_LOG.SUCESSO, d, dao.listarArquivosPendentesLogEnvio(d.cnpj));
+
+
+            
+
+            ArquivosController filesCtrl = new ArquivosController();
+
+            List<DocsFileVo> waitingFiles = null;
+            /*
+                Verifica se e necessario fazer uma checagem no diretorio em busca de alguma pendencia.*/
+           
+
+            if (checkDir){
+                DaoTxtImpl.regMsg("Lista arquivos pendentes de envio encontrados no diretorio.");
+                waitingFiles = filesCtrl.listWaitingFilesDirectory(d);
+
+                DaoTxtImpl.regMsg("Insere pendencias do diretorio na tabela. QTD:"+waitingFiles.Count);
+                dao.insertWaitingSend(waitingFiles);
+            }else {
+                DaoTxtImpl.regMsg("Lista arquivos pendentes de envio encontrados na tabela de pendencia.");
+                List <String> listName = dao.listNameFilesWaitingDirectory(d);
+
+                DaoTxtImpl.regMsg("Total de pendencia no diretorio."+ listName.Count);
+                waitingFiles = filesCtrl.getParseToListDocssFileVo(listName,d.cnpj,false);
+            }
+
+
+
+            PoolControle.liberarPoolGrandesArquivos();
+
+            int maxSendFiles = 0;
+
+            DaoTxtImpl.regMsg("Inicio envio de "+ waitingFiles.Count + " arquivos pendentes.");
+
+            foreach (DocsFileVo docs in waitingFiles)
+            {
+                if (profile.maxArqMin == 0 | maxSendFiles < profile.maxArqMin)
+                {
+                    DocsFileVo send = filesCtrl.popularEnvioDocsFileVo(docs, profile,d);
+                    ReceiverClient.enviarArquivo(send, profile);
+                    maxSendFiles++;
+                }
+                else {
+                    break;
+                }
+            }
+            DaoTxtImpl.regMsg("Fim envio de arquivos pendentes.");
+            this.logEnviarArquivos((int)TIPO_ENVIO_LOG.PENDENTE, d, waitingFiles);
+        }
+
+
+        private void logEnviarArquivos(int tipoEnvio,DocssDirectory d, List<DocsFileVo> list) {
+            StringBuilder arquvios = new StringBuilder();
+            int count = 0;
+            foreach (DocsFileVo docs in list) {
+                arquvios.Append(docs.nomeArquivo + System.Environment.NewLine);
+                count++;
+            }
+
+            if (count > 0)
+            {
+                if (tipoEnvio == 1)
+                {
+                    LogClient.logServicoProcessandoArquivos(profile, count, arquvios,d);
+                }
+                else if (tipoEnvio == 2) {
+                    LogClient.logServicoProcessandoArquivosSucesso(profile, count, arquvios,d);
+                    dao.atualizarStatusLogEnvioSucesso(d.cnpj, list);
+                }
+            }
+        }
+
+        public void processarArquivos()
+        {
+
+            
+
+            this.refresh();
+            if (ReceiverClient.checarServidor(profile)) {
+                AppController.serverStatus = true;
+
+               
+                /*Verifica quais diretorios estao validos.*/
+                profile.listDocssDirectory = this.checarDiretorios(profile.listDocssDirectory);
+
+                /* Verifica checagem de diretorio.*/
+                checkDir = DocssTimeUtil.isTimeCheckDir();
+
+                    
+                    foreach (DocssDirectory dir in profile.listDocssDirectory) {
+                        //List<DocsFileVo> list = dao.listarArquivosPendentesLogEnvio(dir.cnpj);
+                        this.processarArquivosPequenos(dir);
+                    }
+
+                    foreach (DocssDirectory dir in profile.listDocssDirectory)
+                    {
+                        this.processarArquivosGrandes(dir.subfolder, dir);
+                    }
+                    
+
+
+            } else {
+                //IMPLEMENTAR REGRA OFF LINE
+                AppController.serverStatus = false;
+            }
+        }
+
+        
+         public static void verificarBancoLocal() {
+
+            String databaseBackup = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\DocSSync\\BAK";
+            String destinoBackup = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\DocSSync\\dcs.dt";
+
+
+            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\DocSSync\\dcs.dt")) {
+                File.Copy(databaseBackup, destinoBackup);
+            }
+        }
+
+        public List<DocssDirectory> checarDiretorios(List<DocssDirectory> list) {
+
+            List<DocssDirectory> validos = new List<DocssDirectory>();
+            List<DocssDirectory> invalidos = new List<DocssDirectory>();
+            String mensagemInvalidos = "ERRO Diretorios Não encontrados:\n";
+            int totalInvalidos = 0;
+
+            foreach (DocssDirectory cnpjDiretorio in list) {
+                if (Directory.Exists(cnpjDiretorio.path))
+                {
+                    validos.Add(cnpjDiretorio);
+                }
+                else {
+                    invalidos.Add(cnpjDiretorio);
+                    mensagemInvalidos += cnpjDiretorio.path + "\n";
+                    totalInvalidos++;
+                }
+            }
+            if (totalInvalidos > 0) {
+                listNotificacoes.Add(mensagemInvalidos);
+            }
+            return validos;
+        }
+
+    }
+
+}
+

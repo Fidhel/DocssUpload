@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocSS-SyncFile", "DocSS-SyncFile\DocSS-SyncFile.csproj", "{631A8599-C2A0-4189-9DED-CCC41F0A7EDA}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup_DocSSync", "..\Setup_DocSSync\Setup_DocSSync\Setup_DocSSync.vdproj", "{3B93E277-6BD5-494C-8E76-152CB92856D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{631A8599-C2A0-4189-9DED-CCC41F0A7EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631A8599-C2A0-4189-9DED-CCC41F0A7EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631A8599-C2A0-4189-9DED-CCC41F0A7EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631A8599-C2A0-4189-9DED-CCC41F0A7EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B93E277-6BD5-494C-8E76-152CB92856D1}.Debug|Any CPU.ActiveCfg = Debug
+		{3B93E277-6BD5-494C-8E76-152CB92856D1}.Debug|Any CPU.Build.0 = Debug
+		{3B93E277-6BD5-494C-8E76-152CB92856D1}.Release|Any CPU.ActiveCfg = Release
+		{3B93E277-6BD5-494C-8E76-152CB92856D1}.Release|Any CPU.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
