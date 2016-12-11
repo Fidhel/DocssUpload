@@ -40,7 +40,7 @@ namespace DocSS_SyncFile.Dao
 
         public List<DocssDirectory> listDocssDirectory()
         {
-            return daoSqLite.listDocssDirectory();
+            return this.listDocssDirectory();
         }
 
         public void atualizarStatusLogEnvioSucesso(String cnpj, List<DocsFileVo> listDocs) {

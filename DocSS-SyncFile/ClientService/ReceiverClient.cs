@@ -22,7 +22,7 @@ namespace DocSS_SyncFile.ClientService
         private static String PRD = "http://login.docss.com.br:8006/DOCS-Receiver/service/";
         private static String HML = "http://suportediversa.ddns.net:8006/DOCS-Receiver/service/";
         private static String DSV = "http://localhost:8080/DOCS-Receiver/service/";
-        protected static String URL_VIGENTE = HML;
+        protected static String URL_VIGENTE = PRD;
         private static String METODO_ENVIO = "rest/send/arquivo";
         private static String METODO_PART = "rest/send/part";
         private static String METODO_ENVIO_TESTE = "rest/send/upload";

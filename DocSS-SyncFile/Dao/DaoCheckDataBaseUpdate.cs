@@ -41,8 +41,20 @@ namespace DocSS_SyncFile.Dao
               Create server options of profile.
             */
             DaoCheckDatabaseUpdate.createColumnProfileServer();
+
+            /*11-12-2016
+              captura de somente xml.
+            */
+            DaoCheckDatabaseUpdate.checkTableCNPJDiretorio();
         }
 
+        private static void checkTableCNPJDiretorio() {
+            /*ALTERAÇÂO PARA CRIAÇÂO DE OPÇÂO DE CAPTURA DE SOMENTE XML COLUNA:SUBPASTA TIPO:BOOLEAN*/
+            if (!verificarTabelaEColuna("CNPJ_DIRETORIO", "SMXML"))
+            {
+                DaoCheckDatabaseUpdate.criarColunaDefaultVal("CNPJ_DIRETORIO", "SMXML", "BOOLEAN", "0");
+            }
+        }
 
         private static void estruturaLogEVersaoApp()
         {

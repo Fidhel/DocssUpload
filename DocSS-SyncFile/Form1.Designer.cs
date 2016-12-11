@@ -72,6 +72,7 @@
             this.CNPJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.diretorio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnRecursividade = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.column_smnt_xml = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridBtnExcluir = new System.Windows.Forms.DataGridViewButtonColumn();
             this.notifyUpdate = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1.SuspendLayout();
@@ -207,7 +208,7 @@
             this.tabControl1.Location = new System.Drawing.Point(5, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(751, 539);
+            this.tabControl1.Size = new System.Drawing.Size(854, 539);
             this.tabControl1.TabIndex = 17;
             // 
             // tabPage1
@@ -228,7 +229,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(743, 506);
+            this.tabPage1.Size = new System.Drawing.Size(846, 506);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Inicialização";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -382,7 +383,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(743, 506);
+            this.tabPage2.Size = new System.Drawing.Size(846, 506);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Captura";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -450,23 +451,27 @@
             this.dataGridDiretorio.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataGridDiretorio.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridDiretorio.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dataGridDiretorio.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.dataGridDiretorio.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridDiretorio.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
             this.dataGridDiretorio.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlDark;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridDiretorio.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridDiretorio.ColumnHeadersHeight = 30;
+            this.dataGridDiretorio.ColumnHeadersHeight = 25;
             this.dataGridDiretorio.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridDiretorio.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CNPJ,
             this.diretorio,
             this.columnRecursividade,
+            this.column_smnt_xml,
             this.dataGridBtnExcluir});
+            this.dataGridDiretorio.GridColor = System.Drawing.SystemColors.ControlLight;
             this.dataGridDiretorio.Location = new System.Drawing.Point(9, 177);
             this.dataGridDiretorio.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridDiretorio.Name = "dataGridDiretorio";
@@ -481,7 +486,7 @@
             this.dataGridDiretorio.RowHeadersVisible = false;
             this.dataGridDiretorio.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridDiretorio.RowTemplate.Height = 28;
-            this.dataGridDiretorio.Size = new System.Drawing.Size(729, 171);
+            this.dataGridDiretorio.Size = new System.Drawing.Size(832, 171);
             this.dataGridDiretorio.TabIndex = 18;
             this.dataGridDiretorio.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridDiretorio_CellClick);
             // 
@@ -504,7 +509,7 @@
             this.diretorio.MaxInputLength = 500;
             this.diretorio.Name = "diretorio";
             this.diretorio.ReadOnly = true;
-            this.diretorio.Width = 415;
+            this.diretorio.Width = 449;
             // 
             // columnRecursividade
             // 
@@ -512,6 +517,14 @@
             this.columnRecursividade.Name = "columnRecursividade";
             this.columnRecursividade.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.columnRecursividade.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // column_smnt_xml
+            // 
+            this.column_smnt_xml.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.column_smnt_xml.HeaderText = "XML";
+            this.column_smnt_xml.Name = "column_smnt_xml";
+            this.column_smnt_xml.ToolTipText = "Habilitar somente envio de arquivos XML. Sim(Marcado) ou Não(Desmarcado)";
+            this.column_smnt_xml.Width = 42;
             // 
             // dataGridBtnExcluir
             // 
@@ -522,7 +535,6 @@
             this.dataGridBtnExcluir.Name = "dataGridBtnExcluir";
             this.dataGridBtnExcluir.Text = "Excluir";
             this.dataGridBtnExcluir.UseColumnTextForButtonValue = true;
-            this.dataGridBtnExcluir.Width = 70;
             // 
             // notifyUpdate
             // 
@@ -536,7 +548,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(760, 551);
+            this.ClientSize = new System.Drawing.Size(871, 551);
             this.Controls.Add(this.tabControl1);
             this.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -588,10 +600,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btnAdicionarDiretorio;
         private System.Windows.Forms.Button recarregarGridDiretorios;
-        private System.Windows.Forms.DataGridViewButtonColumn dataGridBtnExcluir;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn columnRecursividade;
-        private System.Windows.Forms.DataGridViewTextBoxColumn diretorio;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CNPJ;
         private System.Windows.Forms.TextBox inputArqMin;
         private System.Windows.Forms.TrackBar trackArqMin;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -602,6 +610,11 @@
         private System.Windows.Forms.LinkLabel labelPendEnvio;
         private System.Windows.Forms.LinkLabel linkatualizarapp;
         private System.Windows.Forms.NotifyIcon notifyUpdate;
+        private System.Windows.Forms.DataGridViewButtonColumn dataGridBtnExcluir;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn column_smnt_xml;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn columnRecursividade;
+        private System.Windows.Forms.DataGridViewTextBoxColumn diretorio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CNPJ;
     }
 }
 

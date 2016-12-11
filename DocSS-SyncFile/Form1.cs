@@ -77,7 +77,7 @@ namespace DocSS_SyncFile
             {
                 if (Directory.Exists(cnpjDiretorio.path))
                 {
-                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, cnpjDiretorio.path,cnpjDiretorio.subfolder);
+                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, cnpjDiretorio.path,cnpjDiretorio.subfolder, cnpjDiretorio.onlyxml);
                 }
                 else {
                     dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, "(NÂO ENCONTRADO)" + cnpjDiretorio.path, cnpjDiretorio.subfolder);
@@ -455,9 +455,11 @@ namespace DocSS_SyncFile
                 dir.cnpj = linha.Cells[0].Value.ToString();
                 dir.path = linha.Cells[1].Value.ToString();
                 dir.subfolder = Convert.ToBoolean(linha.Cells[2].Value.ToString());
+                dir.onlyxml = Convert.ToBoolean(linha.Cells[3].Value.ToString());
                 list.Add(dir);
             }
             DaoSqLiteImpl.atualizarCnpjDiretorio(list);
+            ctrlApp.refresh();
             this.popularInterface();
         }
 

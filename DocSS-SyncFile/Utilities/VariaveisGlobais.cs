@@ -13,7 +13,7 @@ namespace DocSS_SyncFile.Utilities
 
         public static readonly String nomeAppSuporteRemoto = "TeamViewerQS_pt.exe";
 
-        public static readonly String productVersion = "1.0.4";
+        public static readonly String productVersion = "1.0.5";
 
         public static readonly String productName = "Docss Upload";
 

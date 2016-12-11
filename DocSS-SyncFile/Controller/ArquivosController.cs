@@ -45,11 +45,15 @@ namespace DocSS_SyncFile.Controller
         {
             List<DocsFileVo> listDocs = new List<DocsFileVo>();
             IEnumerable<String> listaDiretorio = null;
+            String fileType =  "*.*";
+            if (d.onlyxml) {
+                fileType = "*.xml";
+            }
             if (d.subfolder) {
-                listaDiretorio = Directory.EnumerateFiles(d.path, "*.*", SearchOption.AllDirectories);
+                listaDiretorio = Directory.EnumerateFiles(d.path, fileType, SearchOption.AllDirectories);
             }
             else {
-                listaDiretorio = Directory.EnumerateFiles(d.path, "*.*", SearchOption.TopDirectoryOnly);
+                listaDiretorio = Directory.EnumerateFiles(d.path, fileType, SearchOption.TopDirectoryOnly);
             }
 
             listDocs = this.getParseToListDocssFileVo(listaDiretorio.ToList(),d.cnpj, false);

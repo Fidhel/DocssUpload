@@ -280,11 +280,11 @@ namespace DocSS_SyncFile.Dao
             return list;
         }
 
-        public List<DocssDirectory> listDocssDirectory()
+        public  List<DocssDirectory> listDocssDirectory()
         {
             DaoSqLiteImpl.conectarBanco();
             sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = "SELECT CNPJ,DIRETORIO,SUBPASTA FROM  CNPJ_DIRETORIO;";
+            sqlite_cmd.CommandText = "SELECT CNPJ,DIRETORIO,SUBPASTA,SMXML FROM  CNPJ_DIRETORIO;";
             SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
             List<DocssDirectory> list = new List<DocssDirectory>();
             while (reader.Read())
@@ -293,6 +293,7 @@ namespace DocSS_SyncFile.Dao
                 d.cnpj = reader["CNPJ"].ToString();
                 d.path = reader["DIRETORIO"].ToString();
                 d.subfolder = reader["SUBPASTA"] as bool? ?? false;
+                d.onlyxml = reader["SMXML"] as bool? ?? false;
                 list.Add(d);
             }
             this.countPathFilesData(list);
@@ -356,11 +357,12 @@ namespace DocSS_SyncFile.Dao
             foreach (DocssDirectory dir in list)
             {
                 sqlite_cmd = sqlite_conn.CreateCommand();
-                sqlite_cmd.CommandText = "UPDATE CNPJ_DIRETORIO SET DIRETORIO=@DIRETORIO,SUBPASTA=@SUBPASTA WHERE CNPJ=@CNPJ"; ;
+                sqlite_cmd.CommandText = "UPDATE CNPJ_DIRETORIO SET DIRETORIO=@DIRETORIO,SUBPASTA=@SUBPASTA,SMXML=@SMXML WHERE CNPJ=@CNPJ"; ;
 
                 sqlite_cmd.Parameters.AddWithValue("@CNPJ", dir.cnpj);
                 sqlite_cmd.Parameters.AddWithValue("@DIRETORIO", dir.path);
                 sqlite_cmd.Parameters.AddWithValue("@SUBPASTA", dir.subfolder);
+                sqlite_cmd.Parameters.AddWithValue("@SMXML", dir.onlyxml);
 
                 sqlite_cmd.ExecuteNonQuery();
             }
