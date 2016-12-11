@@ -22,7 +22,6 @@ namespace DocSS_SyncFile.Controller
         private DaoAcess dao;
         private Profile profile;
         private FileMonitor fileMonitor;
-        private bool checkDir;
         
         public static int qtdEnvio = 0;
         public static int qtdPendentesEnvio = 0;
@@ -35,7 +34,6 @@ namespace DocSS_SyncFile.Controller
         {
             dao = new DaoAcess();
             this.refresh();
-            fileMonitor = new FileMonitor(profile); 
         }
 
         public void refresh() {
@@ -119,23 +117,13 @@ namespace DocSS_SyncFile.Controller
             ArquivosController filesCtrl = new ArquivosController();
 
             List<DocsFileVo> waitingFiles = null;
-            /*
-                Verifica se e necessario fazer uma checagem no diretorio em busca de alguma pendencia.*/
-           
+            
+            DaoTxtImpl.regMsg("Lista arquivos pendentes de envio encontrados no diretorio.");
+            waitingFiles = filesCtrl.listWaitingFilesDirectory(d);
 
-            if (checkDir){
-                DaoTxtImpl.regMsg("Lista arquivos pendentes de envio encontrados no diretorio.");
-                waitingFiles = filesCtrl.listWaitingFilesDirectory(d);
-
-                DaoTxtImpl.regMsg("Insere pendencias do diretorio na tabela. QTD:"+waitingFiles.Count);
-                dao.insertWaitingSend(waitingFiles);
-            }else {
-                DaoTxtImpl.regMsg("Lista arquivos pendentes de envio encontrados na tabela de pendencia.");
-                List <String> listName = dao.listNameFilesWaitingDirectory(d);
-
-                DaoTxtImpl.regMsg("Total de pendencia no diretorio."+ listName.Count);
-                waitingFiles = filesCtrl.getParseToListDocssFileVo(listName,d.cnpj,false);
-            }
+            DaoTxtImpl.regMsg("Insere pendencias do diretorio na tabela. QTD:"+waitingFiles.Count);
+            dao.insertWaitingSend(waitingFiles);
+            
 
 
 
@@ -192,26 +180,18 @@ namespace DocSS_SyncFile.Controller
             if (ReceiverClient.checarServidor(profile)) {
                 AppController.serverStatus = true;
 
-               
                 /*Verifica quais diretorios estao validos.*/
                 profile.listDocssDirectory = this.checarDiretorios(profile.listDocssDirectory);
 
-                /* Verifica checagem de diretorio.*/
-                checkDir = DocssTimeUtil.isTimeCheckDir();
+                foreach (DocssDirectory dir in profile.listDocssDirectory) {
+                    //List<DocsFileVo> list = dao.listarArquivosPendentesLogEnvio(dir.cnpj);
+                    this.processarArquivosPequenos(dir);
+                }
 
-                    
-                    foreach (DocssDirectory dir in profile.listDocssDirectory) {
-                        //List<DocsFileVo> list = dao.listarArquivosPendentesLogEnvio(dir.cnpj);
-                        this.processarArquivosPequenos(dir);
-                    }
-
-                    foreach (DocssDirectory dir in profile.listDocssDirectory)
-                    {
-                        this.processarArquivosGrandes(dir.subfolder, dir);
-                    }
-                    
-
-
+                foreach (DocssDirectory dir in profile.listDocssDirectory)
+                {
+                    this.processarArquivosGrandes(dir.subfolder, dir);
+                }
             } else {
                 //IMPLEMENTAR REGRA OFF LINE
                 AppController.serverStatus = false;
