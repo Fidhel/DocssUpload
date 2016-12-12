@@ -76,6 +76,7 @@ namespace DocSS_SyncFile.Dao
                 cnpjDiretorio.cnpj = "0000000000000";
                 cnpjDiretorio.path = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\DocSS";
                 cnpjDiretorio.subfolder = true;
+                cnpjDiretorio.onlyxml = false;
                 DaoSqLiteImpl.incluirCnpjDiretorio(cnpjDiretorio);
                 cnpjDiretorio.path = cnpjDiretorio.path + "\\";
                 List<DocssDirectory>  list = new List<DocssDirectory>();

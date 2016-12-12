@@ -322,11 +322,12 @@ namespace DocSS_SyncFile.Dao
         {
             DaoSqLiteImpl.conectarBanco();
             sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = "INSERT INTO CNPJ_DIRETORIO VALUES(@CNPJ,@DIRETORIO,@SUBPASTA);";
+            sqlite_cmd.CommandText = "INSERT INTO CNPJ_DIRETORIO VALUES(@CNPJ,@DIRETORIO,@SUBPASTA,@SMXML);";
 
             sqlite_cmd.Parameters.AddWithValue("@CNPJ", cnpjDiretorio.cnpj);
             sqlite_cmd.Parameters.AddWithValue("@DIRETORIO", cnpjDiretorio.path + "\\");
             sqlite_cmd.Parameters.AddWithValue("@SUBPASTA", cnpjDiretorio.subfolder);
+            sqlite_cmd.Parameters.AddWithValue("@SMXML", cnpjDiretorio.onlyxml);
 
             sqlite_cmd.ExecuteNonQuery();
         }
