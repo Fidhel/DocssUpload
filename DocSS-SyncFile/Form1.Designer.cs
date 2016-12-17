@@ -69,12 +69,12 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.dataGridDiretorio = new System.Windows.Forms.DataGridView();
+            this.notifyUpdate = new System.Windows.Forms.NotifyIcon(this.components);
             this.CNPJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.diretorio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnRecursividade = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.column_smnt_xml = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridBtnExcluir = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.notifyUpdate = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -457,7 +457,7 @@
             this.dataGridDiretorio.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlDark;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -490,6 +490,13 @@
             this.dataGridDiretorio.TabIndex = 18;
             this.dataGridDiretorio.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridDiretorio_CellClick);
             // 
+            // notifyUpdate
+            // 
+            this.notifyUpdate.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyUpdate.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyUpdate.Icon")));
+            this.notifyUpdate.Text = "Docss Upload";
+            this.notifyUpdate.BalloonTipClicked += new System.EventHandler(this.notifyUpdate_BalloonTipClicked);
+            // 
             // CNPJ
             // 
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -517,14 +524,14 @@
             this.columnRecursividade.Name = "columnRecursividade";
             this.columnRecursividade.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.columnRecursividade.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.columnRecursividade.Width = 96;
             // 
             // column_smnt_xml
             // 
-            this.column_smnt_xml.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.column_smnt_xml.HeaderText = "XML";
             this.column_smnt_xml.Name = "column_smnt_xml";
             this.column_smnt_xml.ToolTipText = "Habilitar somente envio de arquivos XML. Sim(Marcado) ou Não(Desmarcado)";
-            this.column_smnt_xml.Width = 42;
+            this.column_smnt_xml.Width = 46;
             // 
             // dataGridBtnExcluir
             // 
@@ -535,13 +542,6 @@
             this.dataGridBtnExcluir.Name = "dataGridBtnExcluir";
             this.dataGridBtnExcluir.Text = "Excluir";
             this.dataGridBtnExcluir.UseColumnTextForButtonValue = true;
-            // 
-            // notifyUpdate
-            // 
-            this.notifyUpdate.ContextMenuStrip = this.contextMenuStrip1;
-            this.notifyUpdate.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyUpdate.Icon")));
-            this.notifyUpdate.Text = "Docss Upload";
-            this.notifyUpdate.BalloonTipClicked += new System.EventHandler(this.notifyUpdate_BalloonTipClicked);
             // 
             // Form1
             // 

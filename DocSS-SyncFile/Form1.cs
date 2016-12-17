@@ -80,7 +80,7 @@ namespace DocSS_SyncFile
                     dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, cnpjDiretorio.path,cnpjDiretorio.subfolder, cnpjDiretorio.onlyxml);
                 }
                 else {
-                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, "(NÂO ENCONTRADO)" + cnpjDiretorio.path, cnpjDiretorio.subfolder);
+                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, "(NÂO ENCONTRADO)" + cnpjDiretorio.path, cnpjDiretorio.subfolder, cnpjDiretorio.onlyxml);
                     int l = dataGridDiretorio.Rows.Count - 1;
                     dataGridDiretorio.Rows[l].Cells[1].Style = new DataGridViewCellStyle { ForeColor = Color.Red };
 
@@ -97,10 +97,10 @@ namespace DocSS_SyncFile
             {
                 if (Directory.Exists(cnpjDiretorio.path))
                 {
-                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, cnpjDiretorio.path, cnpjDiretorio.subfolder);
+                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, cnpjDiretorio.path, cnpjDiretorio.subfolder, cnpjDiretorio.onlyxml);
                 }
                 else {
-                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, "(NÂO ENCONTRADO)" + cnpjDiretorio.path, cnpjDiretorio.subfolder);
+                    dataGridDiretorio.Rows.Add(cnpjDiretorio.cnpj, "(NÂO ENCONTRADO)" + cnpjDiretorio.path, cnpjDiretorio.subfolder, cnpjDiretorio.onlyxml);
                     int l = dataGridDiretorio.Rows.Count - 1;
                     dataGridDiretorio.Rows[l].Cells[1].Style = new DataGridViewCellStyle { ForeColor = Color.Red };
 
@@ -430,6 +430,7 @@ namespace DocSS_SyncFile
                 cnpjDiretorio.cnpj = cnpj;
                 cnpjDiretorio.path = diretorio;
                 cnpjDiretorio.subfolder = true;
+                cnpjDiretorio.onlyxml = false;
 
                 DaoSqLiteImpl.incluirCnpjDiretorio(cnpjDiretorio);
                 this.loadGridDir(); 
